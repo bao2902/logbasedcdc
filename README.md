@@ -73,6 +73,7 @@ ON stream_users.payload->after->user_id = stream_wages.payload->after->user_id
 PARTITION BY '{"schema":{"type":"struct","fields":[{"type":"int32","optional":false,"field":"user_id"}],"optional":false,"name":"sink_database.user_wages_1.Key"},"payload":{"user_id":' + CAST(stream_users.payload->after->user_id AS VARCHAR) + '}}'
 ;
 
+
 # Access source Postgres and insert/update/delete data for users and wages
 
 sudo docker exec -it  postgres-source /bin/bash
@@ -90,6 +91,22 @@ INSERT INTO wages VALUES(1, '1000');
 UPDATE wages SET wage = 1000 + 1 WHERE user_id = 1;
 
 DELETE FROM wages WHERE user_id = 1;
+
+
+# Access kSQL client and check data
+
+select * from stream_users;
+
+select * from stream_wages;
+
+select * from stream_user_wages;
+
+PRINT 'localhost.public.wages' FROM BEGINNING LIMIT 100;
+
+PRINT 'localhost.public.users' FROM BEGINNING LIMIT 100;
+
+PRINT 'sink_database.user_wages' FROM BEGINNING LIMIT 100;
+
 
 # Access sink Postgres and check data
 
