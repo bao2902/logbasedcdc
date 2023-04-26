@@ -1,3 +1,19 @@
+# Build Dockerfile
+
+sudo docker build -t nashtech/kafka .
+
+# Start Docker Compose
+
+sudo docker-compose up -d
+
+# Access Kafka container and run Kafka
+
+sudo docker exec -t -i kafka /bin/bash
+
+cd /bin
+
+connect-standalone /config/connect-standalone.properties /config/connect-postgres-source.properties /config/connect-postgres-sink-users.properties /config/connect-postgres-sink-wages.properties /config/connect-postgres-sink-user-wages.properties
+
 # Create kSQL stream for users
 
 CREATE STREAM stream_users (
