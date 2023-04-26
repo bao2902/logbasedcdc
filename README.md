@@ -14,6 +14,10 @@ cd /bin
 
 connect-standalone /config/connect-standalone.properties /config/connect-postgres-source.properties /config/connect-postgres-sink-users.properties /config/connect-postgres-sink-wages.properties /config/connect-postgres-sink-user-wages.properties
 
+# Access kSQL client
+
+sudo docker-compose exec ksqldb-cli ksql http://ksqldb-server:8088
+
 # Create kSQL stream for users
 
 CREATE STREAM stream_users (
@@ -68,3 +72,33 @@ WITHIN 1 HOURS GRACE PERIOD 15 MINUTES
 ON stream_users.payload->after->user_id = stream_wages.payload->after->user_id
 PARTITION BY '{"schema":{"type":"struct","fields":[{"type":"int32","optional":false,"field":"user_id"}],"optional":false,"name":"sink_database.user_wages_1.Key"},"payload":{"user_id":' + CAST(stream_users.payload->after->user_id AS VARCHAR) + '}}'
 ;
+
+# Access source Postgres and insert/update/delete data for users and wages
+
+sudo docker exec -it  postgres-source /bin/bash
+
+psql -U postgres
+
+INSERT INTO users VALUES(1, 'first 1', 'last 1');
+
+UPDATE users SET first_name = 'first 1 updated' WHERE user_id = 1;
+
+DELETE FROM users WHERE user_id = 1;
+
+INSERT INTO wages VALUES(1, '1000');
+
+UPDATE wages SET wage = 1000 + 1 WHERE user_id = 1;
+
+DELETE FROM wages WHERE user_id = 1;
+
+# Access sink Postgres and check data
+
+sudo docker exec -it  postgres-sink /bin/bash
+
+psql -U postgres
+
+select * from users;
+
+select * from wages;
+
+select * from user_wages;
