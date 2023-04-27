@@ -174,3 +174,83 @@ WITHIN 1 HOURS GRACE PERIOD 15 MINUTES
 ON stream_users.payload->after->user_id = stream_wages.payload->after->user_id
 PARTITION BY '{"schema":{"type":"struct","fields":[{"type":"int32","optional":false,"field":"user_id"}],"optional":false,"name":"sink_database.user_wages_1.Key"},"payload":{"user_id":' + CAST(stream_users.payload->after->user_id AS VARCHAR) + '}}'
 ;
+
+
+# Steps to test the context 1:
+
+1. Test case of "insert"
+
+Access sink PostgreSQL container and check if a record with "user_id = 1" is created in Users and Wages table
+
+select * from Users;
+
+select * from Wages;
+
+2. Test case of "update"
+
+Access source PostgreSQL container and update the record with "user_id = 1"
+
+UPDATE users SET first_name = 'first 1 updated' WHERE user_id = 1;
+
+UPDATE wages SET wage = 1000 + 1 WHERE user_id = 1;
+
+Access sink PostgreSQL container and check if the record with "user_id = 1" is updated
+
+select * from Users;
+
+select * from Wages;
+
+3. Test case of "delete"
+
+Access source PostgreSQL container and delete the record with "user_id = 1"
+
+DELETE FROM users WHERE user_id = 1;
+
+DELETE FROM wages WHERE user_id = 1;
+
+Access sink PostgreSQL container and check if the record with "user_id = 1" is deleted
+
+select * from Users;
+
+select * from Wages;
+
+
+
+# Steps to test the context 2:
+
+1. Test case of "insert"
+
+Access source PostgreSQL container and insert a record with "user_id = 2"
+
+INSERT INTO users VALUES(2, 'first 2', 'last 2');
+
+INSERT INTO wages VALUES(2, '2000');
+
+Access sink PostgreSQL container and check if a record with "user_id = 1" is created in User_Wages table
+
+select * from user_wages;
+
+2. Test case of "update"
+
+Access source PostgreSQL container and update the record with "user_id = 2"
+
+UPDATE users SET first_name = 'first 2 updated' WHERE user_id = 2;
+
+UPDATE wages SET wage = 2000 + 1 WHERE user_id = 2;
+
+Access sink PostgreSQL container and check if the record with "user_id = 2" is updated
+
+select * from user_wages;
+
+3. Test case of "delete"
+
+Access source PostgreSQL container and delete the record with "user_id = 2"
+
+DELETE FROM users WHERE user_id = 2;
+
+DELETE FROM wages WHERE user_id = 2;
+
+Access sink PostgreSQL container and check if the record with "user_id = 2" is deleted
+
+select * from user_wages;
+
