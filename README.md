@@ -42,3 +42,75 @@
 "plugins" folder includes the following plugins:
 - Debezium PostgreSQL source connector (debezium-connector-postgres)
 - Debezium JDBC sink connector (confluentinc-kafka-connect-jdbc)
+
+
+# Steps to start containers:
+
+1. Build Dockerfile
+
+sudo docker build -t nashtech/kafka .
+
+2. Start Docker Compose
+
+sudo docker-compose up -d
+
+
+# Steps to create source PosgreeSQL tables:
+
+1. Access source PostgreSQL container
+
+sudo docker exec -it  postgres-source /bin/bash
+
+psql -U postgres
+
+2. Create Users table and insert 1 record
+
+CREATE TABLE users(user_id INTEGER, first_name VARCHAR(200), last_name VARCHAR(200), PRIMARY KEY (user_id));
+
+INSERT INTO users VALUES(1, 'first 1', 'last 1');
+
+3. Create Wages table and insert 1 record
+
+CREATE TABLE wages(user_id INTEGER, wage integer, PRIMARY KEY (user_id));
+
+INSERT INTO wages VALUES(1, '1000');
+
+
+
+# Steps to create sink PosgreeSQL tables:
+
+1. Access sink PostgreSQL container
+
+sudo docker exec -it  postgres-sink /bin/bash
+
+psql -U postgres
+
+2. Create Users table
+
+CREATE TABLE users(user_id INTEGER, first_name VARCHAR(200), last_name VARCHAR(200), PRIMARY KEY (user_id));
+
+3. Create Wages table 
+
+CREATE TABLE wages(user_id INTEGER, wage integer, PRIMARY KEY (user_id));
+
+4. Create User_Wages table 
+
+CREATE TABLE user_wages(user_id INTEGER, full_name VARCHAR(200), wage integer, PRIMARY KEY (user_id));
+
+
+
+# Steps to create source Kafka topics:
+
+1. Access Kafka container
+
+sudo docker exec -t -i kafka /bin/bash
+
+2. Start Kafka standalone cluster
+
+cd /bin
+
+connect-standalone /config/connect-standalone.properties /config/connect-postgres-source.properties /config/connect-postgres-sink-users.properties /config/connect-postgres-sink-wages.properties /config/connect-postgres-sink-user-wages.properties
+
+3. Check source Kafka topics
+
+kafka-topics --list --bootstrap-server localhost:9092
