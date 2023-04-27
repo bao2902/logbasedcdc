@@ -21,7 +21,7 @@
 
 # Architecture
 
-![alt text](https://github.com/bao2902/logbasedcdc/blob/main/LogBasedCDC.png?raw=true)
+![alt text](https://github.com/bao2902/logbasedcdc/blob/main/LogBasedCDC.PNG)
 
 # Build Dockerfile
 
