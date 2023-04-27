@@ -9,15 +9,16 @@
 
 # Context 2
 
-- We have a Users table (fields: user_id, first_name, last_name) in a source PostgreSQL database.
-- We have a Wages table (fields: user_id, wage) in a soure PostgreSQL database.
-- We have a User_Wages table (fields: user_id, full_name, wage) in a sink PostgreSQL database.
-- We want to synchronize the Change Data Capture (CDC) to the table User_Wages in a sink PostgreSQL database when the tables Users and Wages are inserted, updated, or deleted in the source PostgreSQL database.
-- This synchonization includes the data tranforming as following:
-++ User_Wages.user_id = Users.user_id
-++ User_Wages.full_name = Users.first_name + ' ' + Users.last_name
-++ User_Wages.wage = Wages.wage
-- We expect this synchonization happenning in near-real-time.
+Context 2:
+We have a Users table (fields: user_id, first_name, last_name) in a source PostgreSQL database.
+We have a Wages table (fields: user_id, wage) in a soure PostgreSQL database.
+We have a User_Wages table (fields: user_id, full_name, wage) in a sink PostgreSQL database.
+We want to synchronize the Change Data Capture (CDC) to the table User_Wages in a sink PostgreSQL database when the tables Users and Wages are inserted, updated, or deleted in the source PostgreSQL database.
+This synchonization includes the data tranforming as following:
+- User_Wages.user_id = Users.user_id
+- User_Wages.full_name = Users.first_name + ' ' + Users.last_name
+- User_Wages.wage = Wages.wage
+We expect this synchonization happenning in near-real-time.
 
 # Build Dockerfile
 
