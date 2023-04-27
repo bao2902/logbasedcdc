@@ -19,6 +19,10 @@
 + User_Wages.wage = Wages.wage
 - We expect this synchonization happenning in near-real-time.
 
+# Architecture
+
+![alt text](https://github.com/bao2902/logbasedcdc/blob/main/LogBasedCDC.png?raw=true)
+
 # Build Dockerfile
 
 sudo docker build -t nashtech/kafka .
