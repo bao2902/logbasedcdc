@@ -7,6 +7,8 @@
 - We want to synchronize the Change Data Capture (CDC) to the tables Users and Wages in a sink PostgreSQL database when the tables Users and Wages are inserted, updated, or deleted in the source PostgreSQL database.
 - We expect this synchonization happenning in near-real-time.
 
+![alt text](https://github.com/bao2902/logbasedcdc/blob/main/LogBasedCDC_1.PNG)
+
 # Context 2: CDC + transform
 
 - We have a Users table (fields: user_id, first_name, last_name) in a source PostgreSQL database.
@@ -19,9 +21,8 @@
 + User_Wages.wage = Wages.wage
 - We expect this synchonization happenning in near-real-time.
 
-# Architecture for both Context 1 and Context 2
+![alt text](https://github.com/bao2902/logbasedcdc/blob/main/LogBasedCDC_2.PNG)
 
-![alt text](https://github.com/bao2902/logbasedcdc/blob/main/LogBasedCDC.PNG)
 
 # Environment
 
