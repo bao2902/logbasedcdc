@@ -34,7 +34,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     volumes: 
       - kafkadata:/var/lib/kafka/data
-    
+	  
   ksqldb-server:
     image: confluentinc/ksqldb-server:0.28.2
     hostname: ksqldb-server
@@ -50,7 +50,7 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: "true"
     volumes:
       - ksqldbserverudfs:/opt/ksqldb-udfs
-    
+	  
   ksqldb-cli:
     image: confluentinc/ksqldb-cli:0.28.2
     container_name: ksqldb-cli
@@ -61,10 +61,10 @@ services:
     tty: true
     volumes:
       - ksqldbcliscripts:/data/scripts/
-  
-  postgres-source:
+	
+  postgres-source-1:
     image: postgres
-    container_name: postgres-source
+    container_name: postgres-source-1
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
@@ -72,6 +72,15 @@ services:
     ports:
       - "5432:5432"
 
+  postgres-source-2:
+    image: postgres
+    container_name: postgres-source-2
+    hostname: postgres-source-2
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata2:/var/lib/postgresql/data
+	  
   postgres-sink:
     image: postgres
     container_name: postgres-sink
@@ -80,7 +89,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata_sink:/var/lib/postgresql/data
-  
+	
   mysql-source:
     image: mysql
     container_name: mysql-source
@@ -99,5 +108,6 @@ volumes:
   ksqldbserverudfs:
   ksqldbcliscripts:
   pgdata:
+  pgdata2:
   pgdata_sink:
   mysql_source:
